@@ -4,30 +4,31 @@
     using Quantum;
     using Quantum.Common;
     using Quantum.Common.Definitions;
-    using Quantum.QueryBuilder.MsSql;
 
-    class People : TableDefinition
+    public class People : TableDefinition
     {
         public People() : base("[dbo].[People]")
         {
+            ID = new ColumnDefinition("Id");
+            NAME = new ColumnDefinition("Name");
+            AGE = new ColumnDefinition("Age");
         }
 
-        public ColumnDefinition ID = new ColumnDefinition("Id");
-        public ColumnDefinition NAME = new ColumnDefinition("Name");
-        public ColumnDefinition _age = new ColumnDefinition("Age");
+        /* Columns */
+        public ColumnDefinition AGE { get; private set; }
+        public ColumnDefinition NAME { get; private set; }
+        public ColumnDefinition ID { get; private set; }
+    }
 
-        public ColumnDefinition AGE
-        {
-            get { return _age; }
-            set { }
-        }
+    public static class Db
+    {
+        /* Tables */
+        public static readonly People PEOPLE = new People();
     }
 
     class Program
     {
-        static readonly People PEOPLE = new People();
-
-        private static void SET(params SqlValueExpression[] exprs)
+        private static void SET(params SqlValueExpression[] exprs) // just for testing
         {
         }
 
@@ -42,7 +43,7 @@
                     .FROM("People")
                     .INNER_JOIN("Employee").ON("Id = PersonId")
                     .INNER_JOIN("City").ON("Id = CityId")
-                    .WHERE(PEOPLE.NAME >= "John" & PEOPLE.ID > @minId)
+                    .WHERE(Db.PEOPLE.NAME >= "John" & Db.PEOPLE.ID > @minId)
                     .ORDERBY(new SqlExpression("Name"))
                     
                 .BuildQuery();
@@ -57,17 +58,17 @@
             Console.WriteLine(p.QueryPartValue);
 
             SET(
-                PEOPLE.ID    <~ SQL.Value("Hello"),
-                PEOPLE.NAME  <~ SQL.Value("John Doe"),
-                PEOPLE.AGE   <~ (PEOPLE.AGE + "2"));
+                Db.PEOPLE.ID    <~ SQL.Value("Hello"),
+                Db.PEOPLE.NAME  <~ SQL.Value("John Doe"),
+                Db.PEOPLE.AGE   <~ (Db.PEOPLE.AGE + "2"));
 
             string query = SQL
 
                     .SELECT(
-                        PEOPLE.ID, 
-                        PEOPLE.NAME                 >~  SQL.Alias("MyName"),
-                        PEOPLE.AGE + PEOPLE.NAME    >~  SQL.Alias("AgeName"))
-                    .FROM(PEOPLE)
+                        Db.PEOPLE.ID, 
+                        Db.PEOPLE.NAME                 >~  SQL.Alias("MyName"),
+                        Db.PEOPLE.AGE + Db.PEOPLE.NAME    >~  SQL.Alias("AgeName"))
+                    .FROM(Db.PEOPLE)
 
                 .BuildQuery();
 

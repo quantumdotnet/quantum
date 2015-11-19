@@ -1,0 +1,2 @@
+﻿ROOT => SELECT => FROM => WHERE? => GROUP_BY? => ORDERBY?
+                  FROM => INNER_JOIN => ON:FROM

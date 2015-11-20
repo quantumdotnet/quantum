@@ -6,7 +6,7 @@ let split (separators: String array) (input:String) =
     input.Split(separators, StringSplitOptions.RemoveEmptyEntries)
 
 let splitLines input =
-    input |> split [|"\r\n"|]
+    input |> split [|"\r\n";"\n"|]
 
 let replace (findText: string) (replaceText: string) (input: string) = 
     input.Replace(findText, replaceText)

@@ -91,8 +91,19 @@ let main argv =
         >>=> (fun (_, _, _, parsedMap) ->
             printfn " |  map nodes parsed: \t%i" parsedMap.Length)
 
+        >>=> (fun _ ->
+            printfn ""
+            printfn "composing dll and map data")
         >>= (fun (input, version, dllData, parsedMap) -> map (Success (compose  parsedMap dllData.Transitions)) (fun composedNodes -> (input, version, dllData, composedNodes)))
+        
+        >>=> (fun _ ->
+            printfn ""
+            printfn "generating output code")
         >>= (fun (input, version, dllData, composedNodes) -> map (Success (generate dllData.Functions composedNodes version)) (fun output -> (input, output)))
+
+        >>=> (fun _ ->
+            printfn ""
+            printfn "saving generated code to out destination")
         >>= (fun (input, generatedCode: string) -> 
             use output = new System.IO.StreamWriter(input.OutputPath)
             do output.WriteLine generatedCode

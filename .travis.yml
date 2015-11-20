@@ -6,4 +6,4 @@ script:
   - mozroots --import --sync
   - mono Src/.nuget/NuGet.exe install Rosalia -ExcludeVersion -Prerelease
   - mono Src/.nuget/NuGet.exe restore "Src/Quantum.Build/packages.config" -OutputDirectory "Src/packages"
-  - mono Rosalia/tools/Rosalia.exe "Src/Quantum.Build/Quantum.Build.csproj" /workDirectory=Src
+  - mono Rosalia/tools/Rosalia.exe /workDirectory=Src "Src/Quantum.Build/Quantum.Build.csproj" 

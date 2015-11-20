@@ -1,3 +1,7 @@
 cd ..
-cd Src/Quantum.BuilderFactory/bin/Debug
-Quantum.BuilderFactory.exe "../../../Quantum.QueryBuilder.MsSql/bin/Debug/Quantum.QueryBuilder.MsSql.dll" "../../../Quantum.QueryBuilder.MsSql/map.txt" "../../../testOut.cs"
+cd Src\.nuget
+NuGet.exe install Rosalia -ExcludeVersion -Prerelease
+NuGet.exe restore "../Quantum.Build/packages.config" -OutputDirectory "../packages"
+cd Rosalia/tools
+Rosalia.exe "../../../Quantum.Build/Quantum.Build.csproj"
+pause

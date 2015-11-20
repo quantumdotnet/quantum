@@ -17,6 +17,16 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quantum.QueryBuilder.MsSql.Generated", "Quantum.QueryBuilder.MsSql.Generated\Quantum.QueryBuilder.MsSql.Generated.csproj", "{7223E9B2-B0E8-49F1-8E0C-0C8104295C15}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quantum.Build", "Quantum.Build\Quantum.Build.csproj", "{43A54BCE-EBE4-4AC8-AFF2-91ED66B4E85C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{0DBBDD0B-CBF1-455B-96E0-FD63E7B1DCEB}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+		.nuget\packages.config = .nuget\packages.config
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +61,10 @@ Global
 		{7223E9B2-B0E8-49F1-8E0C-0C8104295C15}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7223E9B2-B0E8-49F1-8E0C-0C8104295C15}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7223E9B2-B0E8-49F1-8E0C-0C8104295C15}.Release|Any CPU.Build.0 = Release|Any CPU
+		{43A54BCE-EBE4-4AC8-AFF2-91ED66B4E85C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{43A54BCE-EBE4-4AC8-AFF2-91ED66B4E85C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{43A54BCE-EBE4-4AC8-AFF2-91ED66B4E85C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{43A54BCE-EBE4-4AC8-AFF2-91ED66B4E85C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

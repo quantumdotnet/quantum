@@ -67,7 +67,7 @@
                     .SELECT(
                         Db.PEOPLE.ID, 
                         Db.PEOPLE.NAME                 >~  SQL.Alias("MyName"),
-                        Db.PEOPLE.AGE + Db.PEOPLE.NAME    >~  SQL.Alias("AgeName"))
+                        Db.PEOPLE.AGE + Db.PEOPLE.NAME >~  SQL.Alias("AgeName"))
                     .FROM(Db.PEOPLE)
 
                 .BuildQuery();

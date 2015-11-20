@@ -96,7 +96,7 @@ let main argv =
         >>= (fun (input, generatedCode: string) -> 
             use output = new System.IO.StreamWriter(input.OutputPath)
             do output.WriteLine generatedCode
-            Success 1)
+            Success 0)
         >>=> (fun exitCode ->
             printfn ""
             cprintfn ConsoleColor.Green "Done")
@@ -114,8 +114,8 @@ let main argv =
 
             code
 
-    printfn ""
-    printfn "Press <Enter> to exit"
-    do System.Console.ReadLine() |> ignore
+    //printfn ""
+    //printfn "Press <Enter> to exit"
+    //do System.Console.ReadLine() |> ignore
 
     exitCode

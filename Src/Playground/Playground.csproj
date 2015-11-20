@@ -32,6 +32,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Quantum">
+      <HintPath>..\..\Artifacts\Quantum.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -46,24 +49,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Quantum.Common\Quantum.Common.csproj">
-      <Project>{735A7622-EB0F-481B-9DD6-8E543FBEA20E}</Project>
-      <Name>Quantum.Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Quantum.QueryBuilder.Common\Quantum.QueryBuilder.Common.csproj">
-      <Project>{B00D4753-D5DC-4374-9E95-00844A4C2E52}</Project>
-      <Name>Quantum.QueryBuilder.Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Quantum.QueryBuilder.MsSql.Generated\Quantum.QueryBuilder.MsSql.Generated.csproj">
-      <Project>{7223E9B2-B0E8-49F1-8E0C-0C8104295C15}</Project>
-      <Name>Quantum.QueryBuilder.MsSql.Generated</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Quantum.QueryBuilder.MsSql\Quantum.QueryBuilder.MsSql.csproj">
-      <Project>{566C9664-9C09-4D68-9D66-51109093B898}</Project>
-      <Name>Quantum.QueryBuilder.MsSql</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

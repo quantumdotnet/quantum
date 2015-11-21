@@ -108,7 +108,7 @@ namespace Quantum.Build
                 {
                     ToolPath = (data.IsMono ? "mono " : "") + data.Src["packages"].AsDirectory().Directories.Last(d => d.Name.StartsWith("ILRepack")).GetDirectory("tools").GetFile("ILRepack.exe").GetRelativePath(data.WorkDirectory),
                     Arguments = string.Format(
-                        "/out:{0} {1}", 
+                        "{0}{1}", 
                         "", //data.Src["Quantum.dll"].AsFile().GetRelativePath(data.WorkDirectory),
                         ""
                         /*

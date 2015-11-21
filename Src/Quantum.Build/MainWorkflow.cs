@@ -37,7 +37,8 @@ namespace Quantum.Build
                     {
                         Configuration = Configuration ?? "Debug",
                         Src = src,
-                        Artifacts = artifacts
+                        Artifacts = artifacts,
+                        IsMono = context.Environment.IsMono
                     }.AsTaskResult();
                 });
 
@@ -99,12 +100,12 @@ namespace Quantum.Build
                 
                 DependsOn(runMetaCodegen));
 
-            var ilMergeTask = Task(
+            ITaskFuture<Nothing> ilMergeTask = Task(
                 "ILMerge",
                 from data in buildData
                 select new ExecTask
                 {
-                    ToolPath = data.Src["packages"].AsDirectory().Directories.Last(d => d.Name.StartsWith("ilmerge")).GetDirectory("tools").GetFile("ILMerge.exe").AbsolutePath,
+                    ToolPath = (data.IsMono ? "mono " : "") + data.Src["packages"].AsDirectory().Directories.Last(d => d.Name.StartsWith("ilmerge")).GetDirectory("tools").GetFile("ILMerge.exe").AbsolutePath,
                     Arguments = string.Format(
                         "/out:{0} {1}", 
                         data.Artifacts["Quantum.dll"].AsFile().AbsolutePath,

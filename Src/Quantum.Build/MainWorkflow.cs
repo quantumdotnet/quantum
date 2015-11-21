@@ -110,13 +110,16 @@ namespace Quantum.Build
                     Arguments = string.Format(
                         "/out:{0} {1}", 
                         data.Src["Quantum.dll"].AsFile().GetRelativePath(data.WorkDirectory),
+                        ""
+                        /*
                         string.Join(" ", 
                             data.Src["Quantum.QueryBuilder.MsSql.Generated"]["bin"][data.Configuration]
                                 .AsDirectory()
                                 .SearchFilesIn()
                                 .Include(f => f.Extension.Is("dll"))
                                 .Select(f => f.GetRelativePath(data.WorkDirectory))
-                            ))
+                            )*/
+                        )
                 }.AsTask(),
                 
                 DependsOn(buildGeneratedCodeProject));

@@ -106,7 +106,7 @@ namespace Quantum.Build
                 from data in buildData
                 select new ExecTask
                 {
-                    ToolPath = (data.IsMono ? "mono " : "") + data.Src["packages"].AsDirectory().Directories.Last(d => d.Name.StartsWith("ilmerge")).GetDirectory("tools").GetFile("ILMerge.exe").GetRelativePath(data.WorkDirectory),
+                    ToolPath = (data.IsMono ? "mono " : "") + data.Src["packages"].AsDirectory().Directories.Last(d => d.Name.StartsWith("ILRepack")).GetDirectory("tools").GetFile("ILRepack.exe").GetRelativePath(data.WorkDirectory),
                     Arguments = string.Format(
                         "/out:{0} {1}", 
                         data.Artifacts["Quantum.dll"].AsFile().AbsolutePath,

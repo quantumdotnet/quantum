@@ -108,17 +108,15 @@ namespace Quantum.Build
                 {
                     ToolPath = (data.IsMono ? "" : "") + data.Src["packages"].AsDirectory().Directories.Last(d => d.Name.StartsWith("ILRepack")).GetDirectory("tools").GetFile("ILRepack.exe").AbsolutePath,
                     Arguments = string.Format(
-                        "{0}{1}", 
-                        "", //data.Src["Quantum.dll"].AsFile().GetRelativePath(data.WorkDirectory),
-                        ""
-                        /*
+                        "/out:{0} {1}", 
+                        data.Src["Quantum.dll"].AsFile().AbsolutePath,
                         string.Join(" ", 
                             data.Src["Quantum.QueryBuilder.MsSql.Generated"]["bin"][data.Configuration]
                                 .AsDirectory()
                                 .SearchFilesIn()
                                 .Include(f => f.Extension.Is("dll"))
-                                .Select(f => f.GetRelativePath(data.WorkDirectory))
-                            )*/
+                                .Select(f => f.AbsolutePath)
+                            )
                         )
                 }.AsTask(),
                 

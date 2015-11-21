@@ -30,7 +30,7 @@ namespace Quantum.Build
                         throw new Exception("Could not find Src directory");    
                     }
 
-                    IDirectory artifacts = src[".."]["Artifacts"];
+                    IDirectory artifacts = src.Parent["Artifacts"];
                     artifacts.EnsureExists();
 
                     return new
@@ -38,7 +38,8 @@ namespace Quantum.Build
                         Configuration = Configuration ?? "Debug",
                         Src = src,
                         Artifacts = artifacts,
-                        IsMono = context.Environment.IsMono
+                        IsMono = context.Environment.IsMono,
+                        WorkDirectory = context.WorkDirectory
                     }.AsTaskResult();
                 });
 
@@ -105,7 +106,7 @@ namespace Quantum.Build
                 from data in buildData
                 select new ExecTask
                 {
-                    ToolPath = (data.IsMono ? "mono " : "") + data.Src["packages"].AsDirectory().Directories.Last(d => d.Name.StartsWith("ilmerge")).GetDirectory("tools").GetFile("ILMerge.exe").AbsolutePath,
+                    ToolPath = (data.IsMono ? "mono " : "") + data.Src["packages"].AsDirectory().Directories.Last(d => d.Name.StartsWith("ilmerge")).GetDirectory("tools").GetFile("ILMerge.exe").GetRelativePath(data.WorkDirectory),
                     Arguments = string.Format(
                         "/out:{0} {1}", 
                         data.Artifacts["Quantum.dll"].AsFile().AbsolutePath,
@@ -114,7 +115,7 @@ namespace Quantum.Build
                                 .AsDirectory()
                                 .SearchFilesIn()
                                 .Include(f => f.Extension.Is("dll"))
-                                .Select(f => f.AbsolutePath)
+                                .Select(f => f.GetRelativePath(data.WorkDirectory))
                             ))
                 }.AsTask(),
                 

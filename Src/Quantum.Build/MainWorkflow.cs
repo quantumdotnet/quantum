@@ -6,7 +6,9 @@ namespace Quantum.Build
     using Rosalia.Core.Tasks.Futures;
     using Rosalia.Core.Tasks.Results;
     using Rosalia.FileSystem;
+    using Rosalia.TaskLib.Git.Tasks;
     using Rosalia.TaskLib.MsBuild;
+    using Rosalia.TaskLib.NuGet.Tasks;
     using Rosalia.TaskLib.Standard.Tasks;
 
     public class MainWorkflow : Workflow
@@ -15,6 +17,9 @@ namespace Quantum.Build
 
         protected override void RegisterTasks()
         {
+            /* 
+             * Init solution
+             */
             var buildData = Task(
                 "Init",
                 context =>
@@ -30,8 +35,14 @@ namespace Quantum.Build
                         throw new Exception("Could not find Src directory");    
                     }
 
-                    IDirectory artifacts = src.Parent["Artifacts"];
+                    IDirectory artifacts = src.Parent/"Artifacts";
                     artifacts.EnsureExists();
+
+                    // remove obsolete artifacts
+                    artifacts
+                        .Files
+                        .IncludeByExtension("nuspec", "nupkg")
+                        .DeleteAll();
 
                     return new
                     {
@@ -43,25 +54,35 @@ namespace Quantum.Build
                     }.AsTaskResult();
                 });
 
+            var solutionVersionTask = Task(
+                "gitVersion",
+                new GetVersionTask().TransformWith(gitVersion => new
+                {
+                    SolutionVersion = gitVersion.Tag.Replace("v", string.Empty) + ".0." + gitVersion.CommitsCount,
+                    NuGetVersion = gitVersion.Tag.Replace("v", string.Empty) + ".0." + gitVersion.CommitsCount + "-alpha"
+                }));
+
             ITaskFuture<Nothing> buildBuilderTask = Task(
                 "BuildBuilderFactoryProject",
                 from data in buildData
                 select new MsBuildTask
                 {
-                    ProjectFile = data.Src["Quantum.BuilderFactory"]["Quantum.BuilderFactory.fsproj"],
+                    ProjectFile = data.Src/"Quantum.BuilderFactory"/"Quantum.BuilderFactory.fsproj",
                     Switches =
                     {
                         MsBuildSwitch.Configuration(data.Configuration),
                         MsBuildSwitch.VerbosityMinimal()
                     }
-                }.AsTask());
+                }.AsTask(),
+                
+                DependsOn(solutionVersionTask));
 
             ITaskFuture<Nothing> buildBasisTask = Task(
                 "BuildSqlBasisProject",
                 from data in buildData
                 select new MsBuildTask
                 {
-                    ProjectFile = data.Src["Quantum.QueryBuilder.MsSql"]["Quantum.QueryBuilder.MsSql.csproj"],
+                    ProjectFile = data.Src/"Quantum.QueryBuilder.MsSql"/"Quantum.QueryBuilder.MsSql.csproj",
                     Switches =
                     {
                         MsBuildSwitch.Configuration(data.Configuration),
@@ -74,13 +95,13 @@ namespace Quantum.Build
                 from data in buildData
                 select new ExecTask
                 {
-                    ToolPath = data.Src["Quantum.BuilderFactory"]["bin"][data.Configuration]["Quantum.BuilderFactory.exe"].AsFile().AbsolutePath,
+                    ToolPath = data.Src/"Quantum.BuilderFactory"/"bin"/data.Configuration/"Quantum.BuilderFactory.exe",
                     Arguments = string.Format(
                         "{0} {1} {2}",
-                        data.Src["Quantum.QueryBuilder.MsSql"]["bin"][data.Configuration]["Quantum.QueryBuilder.MsSql.dll"].AsFile().AbsolutePath,
-                        data.Src["Quantum.QueryBuilder.MsSql"]["map.txt"].AsFile().AbsolutePath,
-                        data.Src["testOut.cs"].AsFile().AbsolutePath),
-                    WorkDirectory = data.Src["Quantum.BuilderFactory"]["bin"][data.Configuration]
+                        data.Src/"Quantum.QueryBuilder.MsSql"/"bin"/data.Configuration/"Quantum.QueryBuilder.MsSql.dll",
+                        data.Src/"Quantum.QueryBuilder.MsSql"/"map.txt",
+                        data.Src/"testOut.cs"),
+                    WorkDirectory = data.Src/"Quantum.BuilderFactory"/"bin"/data.Configuration
                 }.AsTask(),
                 
                 DependsOn(buildBuilderTask),
@@ -91,7 +112,7 @@ namespace Quantum.Build
                 from data in buildData
                 select new MsBuildTask
                 {
-                    ProjectFile = data.Src["Quantum.QueryBuilder.MsSql.Generated"]["Quantum.QueryBuilder.MsSql.Generated.csproj"],
+                    ProjectFile = data.Src/"Quantum.QueryBuilder.MsSql.Generated"/"Quantum.QueryBuilder.MsSql.Generated.csproj",
                     Switches =
                     {
                         MsBuildSwitch.Configuration(data.Configuration),
@@ -106,14 +127,14 @@ namespace Quantum.Build
                 from data in buildData
                 select new ExecTask
                 {
-                    ToolPath = (data.IsMono ? "" : "") + data.Src["packages"].AsDirectory().Directories.Last(d => d.Name.StartsWith("ILRepack")).GetDirectory("tools").GetFile("ILRepack.exe").AbsolutePath,
+                    ToolPath = (data.Src/"packages").AsDirectory().Directories.Last(d => d.Name.StartsWith("ILRepack"))/"tools"/"ILRepack.exe",
                     Arguments = string.Format(
                         "/out:{0} {1}", 
-                        data.Src["Quantum.dll"].AsFile().AbsolutePath,
+                        data.Artifacts/"Quantum.dll",
                         string.Join(" ", 
-                            data.Src["Quantum.QueryBuilder.MsSql.Generated"]["bin"][data.Configuration]
+                            (data.Src/"Quantum.QueryBuilder.MsSql.Generated"/"bin"/data.Configuration)
                                 .AsDirectory()
-                                .SearchFilesIn()
+                                .Files
                                 .Include(f => f.Extension.Is("dll"))
                                 .Select(f => f.AbsolutePath)
                             )
@@ -121,6 +142,70 @@ namespace Quantum.Build
                 }.AsTask(),
                 
                 DependsOn(buildGeneratedCodeProject));
+
+            /* ======================================================================================== */
+
+            var nuspecQuantum = Task(
+                "nuspecRosaliaExe",
+
+                from data in buildData
+                from version in solutionVersionTask
+                select new GenerateNuGetSpecTask(data.Artifacts/"Quantum.nuspec")
+                    .Id("Quantum")
+                    .Version(version.NuGetVersion)
+                    .Authors("Eugene Guryanov")
+                    .Description("Quantum is a SQL builder library for C#")
+                    .WithFile(data.Artifacts/"Quantum.dll", "lib")
+                    .AsTask(),
+
+                DependsOn(ilMergeTask));
+
+
+            var nuspecQuantumCodegen = Task(
+                "nuspecQuantumCodegen",
+
+                from data in buildData
+                from version in solutionVersionTask
+                select new GenerateNuGetSpecTask(data.Artifacts/"Quantum.CodeGen.nuspec")
+                    .Id("Quantum.CodeGen")
+                    .Version(version.NuGetVersion)
+                    .Authors("Eugene Guryanov, ordis")
+                    .Description("Model code generator for Quantum.NET")
+                    .WithFile(data.Src/"Quantum.Generator"/"bin"/data.Configuration/"Quantum.Generator.exe", "tools")
+                    .WithFile(data.Src/"Quantum.Build"/"Assets"/"init.ps1", "tools")
+                    .AsTask(),
+
+                DependsOn(nuspecQuantum));
+
+            /* ======================================================================================== */
+
+            var generateNuGetPackages = Task(
+                "Generate NuGet packages",
+                from data in buildData
+                select ForEach(data.Artifacts.Files.IncludeByExtension(".nuspec")).Do(
+                    file => new GeneratePackageTask(file)
+                    {
+                        ToolPath = data.Src/".nuget"/"NuGet.exe"
+                    },
+                    file => "pack " + file.Name),
+
+                DependsOn(nuspecQuantum),
+                DependsOn(nuspecQuantumCodegen));
+
+            /* ======================================================================================== */
+
+            Task(
+                "pushNuGetPackages",
+                from data in buildData
+                select
+                    ForEach(data.Artifacts.Files.IncludeByExtension(".nupkg")).Do(
+                        task: file => new PushPackageTask(file)
+                        {
+                            ToolPath = data.Src/".nuget"/"NuGet.exe"
+                        },
+                        name: file => "push" + file.NameWithoutExtension),
+
+                DependsOn(generateNuGetPackages));
         }
     }
 }

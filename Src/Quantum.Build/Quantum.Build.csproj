@@ -12,8 +12,8 @@
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <StartAction>Program</StartAction>
-    <StartProgram>$(MSBuildProjectDirectory)\..\packages\Rosalia.2.5.17-alpha\tools\Rosalia.exe</StartProgram>
-    <StartWorkingDirectory>$(MSBuildProjectDirectory)\..\packages\Rosalia.2.5.17-alpha\tools</StartWorkingDirectory>
+    <StartProgram>$(MSBuildProjectDirectory)\..\packages\Rosalia.2.5.43-alpha\tools\Rosalia.exe</StartProgram>
+    <StartWorkingDirectory>$(MSBuildProjectDirectory)\..\packages\Rosalia.2.5.43-alpha\tools</StartWorkingDirectory>
     <StartArguments>/hold ..\..\..\Quantum.Build\bin\$(Configuration)\Quantum.Build.dll</StartArguments>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
@@ -36,17 +36,35 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Rosalia.Core">
-      <HintPath>..\packages\Rosalia.Core.2.5.17-alpha\lib\Rosalia.Core.dll</HintPath>
+    <Reference Include="Nustache.Core">
+      <HintPath>..\packages\Nustache.1.15.3.7\lib\net20\Nustache.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Rosalia.FileSystem">
-      <HintPath>..\packages\Rosalia.Core.2.5.17-alpha\lib\Rosalia.FileSystem.dll</HintPath>
+    <Reference Include="Rosalia.Core, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Rosalia.Core.2.5.43-alpha\lib\Rosalia.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Rosalia.TaskLib.MsBuild">
-      <HintPath>..\packages\Rosalia.TaskLib.MsBuild.2.5.17-alpha\lib\Rosalia.TaskLib.MsBuild.dll</HintPath>
+    <Reference Include="Rosalia.FileSystem, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Rosalia.Core.2.5.43-alpha\lib\Rosalia.FileSystem.dll</HintPath>
     </Reference>
-    <Reference Include="Rosalia.TaskLib.Standard">
-      <HintPath>..\packages\Rosalia.Core.2.5.17-alpha\lib\Rosalia.TaskLib.Standard.dll</HintPath>
+    <Reference Include="Rosalia.TaskLib.AssemblyInfo">
+      <HintPath>..\packages\Rosalia.TaskLib.AssemblyInfo.2.5.25-alpha\lib\Rosalia.TaskLib.AssemblyInfo.dll</HintPath>
+    </Reference>
+    <Reference Include="Rosalia.TaskLib.Git, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Rosalia.TaskLib.Git.2.5.25-alpha\lib\Rosalia.TaskLib.Git.dll</HintPath>
+    </Reference>
+    <Reference Include="Rosalia.TaskLib.MsBuild, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Rosalia.TaskLib.MsBuild.2.5.25-alpha\lib\Rosalia.TaskLib.MsBuild.dll</HintPath>
+    </Reference>
+    <Reference Include="Rosalia.TaskLib.NuGet">
+      <HintPath>..\packages\Rosalia.TaskLib.NuGet.2.5.25-alpha\lib\Rosalia.TaskLib.NuGet.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Rosalia.TaskLib.Standard, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Rosalia.Core.2.5.43-alpha\lib\Rosalia.TaskLib.Standard.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -61,6 +79,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

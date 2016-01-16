@@ -173,6 +173,7 @@ namespace Quantum.Build
                     .Description("Model code generator for Quantum.NET")
                     .WithFile(data.Src/"Quantum.Generator"/"bin"/data.Configuration/"Quantum.Generator.exe", "tools")
                     .WithFile(data.Src/"Quantum.Build"/"Assets"/"init.ps1", "tools")
+                    .WithFile(data.Src/"Quantum.Build"/"Assets"/"QuantumCodeGenModule.psm1", "tools")
                     .AsTask(),
 
                 DependsOn(nuspecQuantum));

@@ -1,12 +1,19 @@
-﻿namespace Quantum.Common.Definitions
+﻿using System;
+
+namespace Quantum.Common.Definitions
 {
-    public class TableDefinition
+    public class TableDefinition : IAliasProvider
     {
         private readonly string _value;
 
         public TableDefinition(string value)
         {
             _value = value;
+        }
+
+        public string Parent
+        {
+            get { return Value; }
         }
 
         public string Value

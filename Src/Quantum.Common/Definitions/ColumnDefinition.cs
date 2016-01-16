@@ -2,16 +2,9 @@
 {
     public class ColumnDefinition : SqlExpression
     {
-        private readonly string _value;
-
-        public ColumnDefinition(string value) : base(value)
+        public ColumnDefinition(string columnName, IAliasProvider alias = null) : 
+            base(alias == null ? columnName : string.Format("{0}.{1}", alias.Parent, columnName))
         {
-            _value = value;
-        }
-
-        public string Value
-        {
-            get { return _value; }
         }
     }
 }

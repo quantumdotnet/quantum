@@ -40,6 +40,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ColumnSelectExpression.cs" />
+    <Compile Include="IAliasProvider.cs" />
     <Compile Include="SqlExpression.cs" />
     <Compile Include="Definitions\ColumnDefinition.cs" />
     <Compile Include="Definitions\TableDefinition.cs" />

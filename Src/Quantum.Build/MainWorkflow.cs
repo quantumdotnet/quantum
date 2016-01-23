@@ -112,7 +112,8 @@ namespace Quantum.Build
                 from data in buildData
                 select new MsBuildTask
                 {
-                    ProjectFile = data.Src/"Quantum.QueryBuilder.MsSql.Generated"/"Quantum.QueryBuilder.MsSql.Generated.csproj",
+                    ProjectFile = data.Src/"Quantum.sln",
+                    //ProjectFile = data.Src / "Quantum.QueryBuilder.MsSql.Generated" / "Quantum.QueryBuilder.MsSql.Generated.csproj",
                     Switches =
                     {
                         MsBuildSwitch.Configuration(data.Configuration),

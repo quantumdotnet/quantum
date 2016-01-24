@@ -56,7 +56,7 @@
       <Name>Quantum.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\Quantum.QueryBuilder.Common\Quantum.QueryBuilder.Common.csproj">
-      <Project>{B00D4753-D5DC-4374-9E95-00844A4C2E52}</Project>
+      <Project>{b00d4753-d5dc-4374-9e95-00844a4c2e52}</Project>
       <Name>Quantum.QueryBuilder.Common</Name>
     </ProjectReference>
   </ItemGroup>

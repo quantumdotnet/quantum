@@ -88,7 +88,9 @@ namespace Quantum.Build
                         MsBuildSwitch.Configuration(data.Configuration),
                         MsBuildSwitch.VerbosityMinimal()
                     }
-                }.AsTask());
+                }.AsTask(),
+                
+                DependsOn(buildBuilderTask));
 
             var runMetaCodegen = Task(
                 "RunBuilderCodeGen",

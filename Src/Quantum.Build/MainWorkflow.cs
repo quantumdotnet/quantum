@@ -149,7 +149,7 @@ namespace Quantum.Build
             /* ======================================================================================== */
 
             var nuspecQuantum = Task(
-                "nuspecRosaliaExe",
+                "nuspecQuantum",
 
                 from data in buildData
                 from version in solutionVersionTask
@@ -189,7 +189,8 @@ namespace Quantum.Build
                 select ForEach(data.Artifacts.Files.IncludeByExtension(".nuspec")).Do(
                     file => new GeneratePackageTask(file)
                     {
-                        ToolPath = data.Src/".nuget"/"NuGet.exe"
+                        ToolPath = data.Src/".nuget"/"NuGet.exe",
+                        WorkDirectory = WorkDirectory
                     },
                     file => "pack " + file.Name),
 

@@ -32,9 +32,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Quantum">
-      <HintPath>..\..\Artifacts\Quantum.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -49,6 +46,20 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Quantum.Common\Quantum.Common.csproj">
+      <Project>{735a7622-eb0f-481b-9dd6-8e543fbea20e}</Project>
+      <Name>Quantum.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Quantum.QueryBuilder.Common\Quantum.QueryBuilder.Common.csproj">
+      <Project>{b00d4753-d5dc-4374-9e95-00844a4c2e52}</Project>
+      <Name>Quantum.QueryBuilder.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Quantum.QueryBuilder.MsSql.Generated\Quantum.QueryBuilder.MsSql.Generated.csproj">
+      <Project>{7223e9b2-b0e8-49f1-8e0c-0c8104295c15}</Project>
+      <Name>Quantum.QueryBuilder.MsSql.Generated</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -190,7 +190,7 @@ namespace Quantum.Build
                     file => new GeneratePackageTask(file)
                     {
                         ToolPath = data.Src/".nuget"/"NuGet.exe",
-                        WorkDirectory = WorkDirectory
+                        WorkDirectory = data.Artifacts
                     },
                     file => "pack " + file.Name),
 
